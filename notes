@@ -1,0 +1,13 @@
+https://github.com/raspberrypi/pico-examples/
+
+* Example 'uart_advanced'
+
+* interrupt critical_section 
+  https://forums.raspberrypi.com/viewtopic.php?t=334038
+  https://github.com/raspberrypi/pico-sdk/blob/master/src/common/pico_util/include/pico/util/queue.h
+
+* PICO_CONFIG
+  https://forums.raspberrypi.com/viewtopic.php?t=362529
+
+* Flash
+  https://github.com/raspberrypi/pico-examples/blob/master/flash/program/flash_program.c
