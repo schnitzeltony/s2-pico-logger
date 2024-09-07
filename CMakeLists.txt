@@ -77,18 +77,18 @@ include(${USERHOME}/.pico-sdk/cmake/pico-vscode.cmake)
 set(PICO_BOARD pico2 CACHE STRING "Board type")
 
 include(pico_sdk_import.cmake)
-project(uart_advanced C CXX ASM)
+project(s2-pico-logger C CXX ASM)
 pico_sdk_init()
 
 
-add_executable(uart_advanced
+add_executable(s2-pico-logger
     src/led.c
     src/serialuart.c
     src/main.c
 )
 
-target_link_libraries(uart_advanced pico_stdlib hardware_uart)
+target_link_libraries(s2-pico-logger pico_stdlib hardware_uart)
 
-pico_add_extra_outputs(uart_advanced)
+pico_add_extra_outputs(s2-pico-logger)
 
 # add url via pico_set_program_url
