@@ -92,3 +92,4 @@ target_link_libraries(s2-pico-logger pico_stdlib hardware_uart)
 pico_add_extra_outputs(s2-pico-logger)
 
 # add url via pico_set_program_url
+target_compile_definitions(s2-pico-logger PRIVATE PICO_UART_ENABLE_CRLF_SUPPORT=0)
