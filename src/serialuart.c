@@ -1,7 +1,6 @@
 #include "serialuart.h"
 #include "hardware/uart.h"
 #include "hardware/irq.h"
-#include "pico/util/queue.h"
 
 #define QUEUE_SIZE 512
 
@@ -32,6 +31,18 @@ void serial_uart_enable_interrupt(uint8_t uartNo)
     irq_set_exclusive_handler(UART_IRQ_NUM(uart), uartNo==0 ? uart0_interrupt : uart1_interrupt);
     irq_set_enabled(UART_IRQ_NUM(uart), true);
     uart_set_irq_enables(uart, true, true);
+}
+
+queue_t *getRxQueue(uint8_t uartNo)
+{
+    assert(uartNo < NUM_UARTS);
+    return &rx_queues[uartNo];
+}
+
+queue_t *getTxQueue(uint8_t uartNo)
+{
+    assert(uartNo < NUM_UARTS);
+    return &tx_queues[uartNo];
 }
 
 static void handleRx(uint8_t uartNo)
