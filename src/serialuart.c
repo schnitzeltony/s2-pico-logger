@@ -1,17 +1,18 @@
 #include "serialuart.h"
 #include "hardware/uart.h"
 #include "hardware/irq.h"
+#include "pico/util/queue.h"
 
-static void uart_rx_interrupt0()
-{
-}
+#define QUEUE_SIZE 512
 
-static void uart_rx_interrupt1()
-{
-}
+queue_t rx_queues[NUM_UARTS];
+queue_t tx_queues[NUM_UARTS];
 
 void serial_uart_init(uint8_t uartNo, uint32_t baudrate, uint8_t rxPin, uint8_t txPin)
 {
+    queue_init(&rx_queues[uartNo], 1, QUEUE_SIZE);
+    queue_init(&tx_queues[uartNo], 1, QUEUE_SIZE);
+
     uart_inst_t *uart = uart_get_instance(uartNo);
     uart_init(uart, baudrate);
 
@@ -22,10 +23,46 @@ void serial_uart_init(uint8_t uartNo, uint32_t baudrate, uint8_t rxPin, uint8_t 
     uart_set_format(uart, 8, 1, UART_PARITY_NONE);
 }
 
-void serial_uart_enable_rx_interrupt(uint8_t uartNo)
+static void uart0_interrupt();
+static void uart1_interrupt();
+
+void serial_uart_enable_interrupt(uint8_t uartNo)
 {
     uart_inst_t *uart = uart_get_instance(uartNo);
-    irq_set_exclusive_handler(UART_IRQ_NUM(uart), uartNo==0 ? uart_rx_interrupt0 : uart_rx_interrupt1);
+    irq_set_exclusive_handler(UART_IRQ_NUM(uart), uartNo==0 ? uart0_interrupt : uart1_interrupt);
     irq_set_enabled(UART_IRQ_NUM(uart), true);
-    uart_set_irq_enables(uart, true, false);
+    uart_set_irq_enables(uart, true, true);
+}
+
+static void handleRx(uint8_t uartNo)
+{
+    uart_inst_t *uart = uart_get_instance(uartNo);
+    queue_t *rx_queue = &rx_queues[uartNo];
+    while(uart_is_readable(uart) && !queue_is_full(rx_queue)) {
+        uint8_t character = uart_getc(uart);
+        queue_try_add(rx_queue, &character);
+    }
+}
+
+static void handleTx(uint8_t uartNo)
+{
+    uart_inst_t *uart = uart_get_instance(uartNo);
+    queue_t *tx_queue = &tx_queues[uartNo];
+    while(!queue_is_empty(tx_queue) && uart_is_writable(uart)) {
+        uint8_t character;
+        queue_try_remove(tx_queue, &character);
+        uart_putc(uart, character);
+    }
+}
+
+static void uart0_interrupt()
+{
+    handleRx(0);
+    handleTx(0);
+}
+
+static void uart1_interrupt()
+{
+    handleRx(1);
+    handleTx(1);
 }
