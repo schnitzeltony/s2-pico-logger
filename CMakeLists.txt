@@ -83,7 +83,7 @@ pico_sdk_init()
 
 add_executable(uart_advanced
     src/led.c
-    src/seriallinuxconsole.c
+    src/serialuart.c
     src/main.c
 )
 
