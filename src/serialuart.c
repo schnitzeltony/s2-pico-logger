@@ -30,7 +30,7 @@ void serial_uart_enable_interrupt(uint8_t uartNo)
     uart_inst_t *uart = uart_get_instance(uartNo);
     irq_set_exclusive_handler(UART_IRQ_NUM(uart), uartNo==0 ? uart0_interrupt : uart1_interrupt);
     irq_set_enabled(UART_IRQ_NUM(uart), true);
-    uart_set_irq_enables(uart, true, true);
+    uart_set_irqs_enabled(uart, true, true);
 }
 
 queue_t *getRxQueue(uint8_t uartNo)
