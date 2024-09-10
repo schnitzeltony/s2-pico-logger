@@ -5,8 +5,7 @@ int main() {
     led_init();
     serial_uart_init(0, 9600, 1, 0);
 
-    led_switch(true);
-
+    bool ledOn = false;
     while (1) {
         queue_t *rx_queue = getRxQueue(0);
         queue_t *tx_queue = getTxQueue(0);
@@ -17,8 +16,11 @@ int main() {
             queue_try_remove(rx_queue, &character);
             queue_try_add(tx_queue, &character);
         }
-        if(starRequired)
+        if(starRequired) {
             startTransmitAfterAddingTransmitData(0);
+            led_switch(ledOn);
+            ledOn = !ledOn;
+        }
         //tight_loop_contents();
     }
 }
