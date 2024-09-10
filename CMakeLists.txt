@@ -29,8 +29,9 @@ pico_sdk_init()
 
 add_executable(s2-pico-logger
     src/led.c
+    src/logtransform.cpp
     src/serialuart.c
-    src/main.c
+    src/main.cpp
 )
 
 target_link_libraries(s2-pico-logger pico_stdlib hardware_uart)
