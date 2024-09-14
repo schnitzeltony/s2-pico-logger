@@ -5,13 +5,13 @@
 #include <stdio.h>
 
 int main() {
-    led_init();
-    serial_uart_init(0, 9600, 1, 0);
-
     fs_init();
     FILE *fp = fopen("HELLO.TXT", "w");
     fprintf(fp, "Hello World!\n");
     fclose(fp);
+
+    led_init();
+    serial_uart_init(0, 9600, 1, 0);
 
     bool ledOn = false;
     LogTransform logTransformer; // for now just cpp test

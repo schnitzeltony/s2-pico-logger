@@ -38,6 +38,7 @@ target_link_libraries(s2-pico-logger
     PRIVATE
     pico_stdlib
     hardware_uart
+    hardware_flash
     )
 
 pico_add_extra_outputs(s2-pico-logger)
@@ -46,5 +47,7 @@ add_subdirectory(pico-vfs)
 pico_enable_filesystem(s2-pico-logger)
 
 # adjustments
-# see https://github.com/oyama/pico-vfs/issues/57
-target_compile_definitions(s2-pico-logger PRIVATE PICO_FS_DEFAULT_SIZE=3145728)
+if(PICO_BOARD STREQUAL "pico2")
+    # see https://github.com/oyama/pico-vfs/issues/57
+    target_compile_definitions(s2-pico-logger PRIVATE PICO_FS_DEFAULT_SIZE=3145728)
+endif()
