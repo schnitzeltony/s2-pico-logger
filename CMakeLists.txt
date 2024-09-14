@@ -34,9 +34,17 @@ add_executable(s2-pico-logger
     src/main.cpp
 )
 
-target_link_libraries(s2-pico-logger pico_stdlib hardware_uart)
+target_link_libraries(s2-pico-logger
+    PRIVATE
+    pico_stdlib
+    hardware_uart
+    )
 
 pico_add_extra_outputs(s2-pico-logger)
 
-# add url via pico_set_program_url
-target_compile_definitions(s2-pico-logger PRIVATE PICO_UART_ENABLE_CRLF_SUPPORT=0)
+add_subdirectory(pico-vfs)
+pico_enable_filesystem(s2-pico-logger)
+
+# adjustments
+# see https://github.com/oyama/pico-vfs/issues/57
+target_compile_definitions(s2-pico-logger PRIVATE PICO_FS_DEFAULT_SIZE=3145728)
