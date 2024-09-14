@@ -24,6 +24,9 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(PICO_BOARD pico2 CACHE STRING "Board type")
 
 include(pico_sdk_import.cmake)
+
+############################################################
+# project specific / editable
 project(s2-pico-logger C CXX ASM)
 pico_sdk_init()
 
@@ -43,6 +46,7 @@ target_link_libraries(s2-pico-logger
 
 pico_add_extra_outputs(s2-pico-logger)
 
+# pico-vfs
 add_subdirectory(pico-vfs)
 pico_enable_filesystem(s2-pico-logger)
 
