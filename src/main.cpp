@@ -27,7 +27,7 @@ int main() {
     serial_uart_init(LinuxConsoleUartNo, 115200, 1, 0);
     serial_uart_init(SystemCtlUartNo, 9600, 7, 6);
 
-    bool ledOn = false;
+    bool ledOn = true;
     LogTransform *logTransformerSysCtl = new LogTransform;
     queue_t *rx_queueSystemCtl = getRxQueue(SystemCtlUartNo);
     LogTransform *logTransformerLinux = new LogTransform;
