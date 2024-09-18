@@ -7,8 +7,7 @@ public:
     LogTransform();
     virtual ~LogTransform();
     void add(char chr);
-    bool hasLine() const;
-    char* getLine();
+    const char* tryGetLine();
 
 private:
     char* m_lineBuffer;

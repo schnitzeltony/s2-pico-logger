@@ -30,14 +30,10 @@ void LogTransform::add(char chr)
     m_lineBuffer[m_currPos++] = chr;
 }
 
-bool LogTransform::hasLine() const
+const char* LogTransform::tryGetLine()
 {
-    return m_hasCompleteLine;
-}
-
-char* LogTransform::getLine()
-{
-    assert(m_hasCompleteLine);
+    if(!m_hasCompleteLine)
+        return nullptr;
     m_hasCompleteLine = false;
     m_lineBuffer[m_currPos] = 0;
     m_currPos = 0;

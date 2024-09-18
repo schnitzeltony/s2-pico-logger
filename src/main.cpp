@@ -9,9 +9,10 @@ static bool queueToLog(queue_t *queue, LogTransform *log, const char* leadText) 
         uint8_t character;
         queue_try_remove(queue, &character);
         log->add(character);
-        if(log->hasLine()) {
+        const char *line = log->tryGetLine();
+        if(line) {
             linePrinted = true;
-            printf("%s: %s\r\n",leadText, log->getLine());
+            printf("%s: %s\r\n",leadText, line);
         }
     }
     return linePrinted;
