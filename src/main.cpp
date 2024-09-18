@@ -3,24 +3,43 @@
 #include "logtransform.h"
 #include <stdio.h>
 
+static bool queueToLog(queue_t *queue, LogTransform *log)
+{
+    bool linePrinted = false;
+    while(!queue_is_empty(queue)) {
+        uint8_t character;
+        queue_try_remove(queue, &character);
+        log->add(character);
+        if(log->hasLine()) {
+            linePrinted = true;
+            puts(log->getLine());
+        }
+    }
+    return linePrinted;
+}
+
 int main() {
     led_init();
-    serial_uart_init(0, 9600, 1, 0);
+
+    stdio_usb_init();
+    constexpr uint8_t LinuxConsoleUartNo = 0;
+    constexpr uint8_t SystemCtlUartNo = 1;
+    serial_uart_init(LinuxConsoleUartNo, 115200, 1, 0);
+    serial_uart_init(SystemCtlUartNo, 9600, 7, 6);
 
     bool ledOn = false;
-    LogTransform logTransformer; // for now just cpp test
+    LogTransform *logTransformerSysCtl = new LogTransform;
+    queue_t *rx_queueSystemCtl = getRxQueue(SystemCtlUartNo);
+    LogTransform *logTransformerLinux = new LogTransform;
+    queue_t *rx_queueLinuxConsole = getRxQueue(LinuxConsoleUartNo);
+
     while (1) {
-        queue_t *rx_queue = getRxQueue(0);
-        queue_t *tx_queue = getTxQueue(0);
-        bool starRequired = false;
-        while(!queue_is_empty(rx_queue)) {
-            starRequired = true;
-            uint8_t character;
-            queue_try_remove(rx_queue, &character);
-            queue_try_add(tx_queue, &character);
-        }
-        if(starRequired) {
-            startTransmitAfterAddingTransmitData(0);
+        bool ledToggle = false;
+        if(queueToLog(rx_queueSystemCtl, logTransformerSysCtl))
+            ledToggle = true;
+        if(queueToLog(rx_queueLinuxConsole, logTransformerLinux))
+            ledToggle = true;
+        if(ledToggle) {
             led_switch(ledOn);
             ledOn = !ledOn;
         }

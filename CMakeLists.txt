@@ -44,9 +44,11 @@ target_link_libraries(s2-pico-logger
     hardware_flash
     )
 
+pico_enable_stdio_usb(s2-pico-logger TRUE)
 pico_add_extra_outputs(s2-pico-logger)
 
 # adjustments
+target_compile_definitions(s2-pico-logger PRIVATE PARAM_ASSERTIONS_ENABLE_ALL=1)
 if(PICO_BOARD STREQUAL "pico2")
     # see https://github.com/oyama/pico-vfs/issues/57
     target_compile_definitions(s2-pico-logger PRIVATE PICO_FS_DEFAULT_SIZE=3145728)
