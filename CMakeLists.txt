@@ -46,10 +46,6 @@ target_link_libraries(s2-pico-logger
 
 pico_add_extra_outputs(s2-pico-logger)
 
-# pico-vfs
-add_subdirectory(pico-vfs)
-pico_enable_filesystem(s2-pico-logger)
-
 # adjustments
 if(PICO_BOARD STREQUAL "pico2")
     # see https://github.com/oyama/pico-vfs/issues/57
