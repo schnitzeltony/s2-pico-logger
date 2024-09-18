@@ -11,4 +11,8 @@
   https://github.com/Memotech-Bill/pico-filesystem
 
 
+uart0: Debug
+uart1: S2 Linux
+uart_pio0_in: S2 Systemcontroller
 
+uart_usb: I/O / Time-Sync
