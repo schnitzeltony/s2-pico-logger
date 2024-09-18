@@ -12,7 +12,7 @@ public:
 
 private:
     char* m_lineBuffer;
-    int m_nextPos = 0;
+    int m_currPos = 0;
     bool m_hasCompleteLine = false;
 };
 

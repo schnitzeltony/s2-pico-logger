@@ -3,8 +3,7 @@
 #include "logtransform.h"
 #include <stdio.h>
 
-static bool queueToLog(queue_t *queue, LogTransform *log)
-{
+static bool queueToLog(queue_t *queue, LogTransform *log, const char* leadText) {
     bool linePrinted = false;
     while(!queue_is_empty(queue)) {
         uint8_t character;
@@ -12,7 +11,7 @@ static bool queueToLog(queue_t *queue, LogTransform *log)
         log->add(character);
         if(log->hasLine()) {
             linePrinted = true;
-            puts(log->getLine());
+            printf("%s: %s\r\n",leadText, log->getLine());
         }
     }
     return linePrinted;
@@ -35,9 +34,9 @@ int main() {
 
     while (1) {
         bool ledToggle = false;
-        if(queueToLog(rx_queueSystemCtl, logTransformerSysCtl))
+        if(queueToLog(rx_queueSystemCtl, logTransformerSysCtl, "SystemController"))
             ledToggle = true;
-        if(queueToLog(rx_queueLinuxConsole, logTransformerLinux))
+        if(queueToLog(rx_queueLinuxConsole, logTransformerLinux, "Linux"))
             ledToggle = true;
         if(ledToggle) {
             led_switch(ledOn);

@@ -15,20 +15,19 @@ LogTransform::~LogTransform()
 
 void LogTransform::add(char chr)
 {
+    if(chr == 0 || chr == 255)
+        return;
     if(m_hasCompleteLine)
         return;
-    if(chr == '\r')
-        return;
-    if(m_nextPos > MaxLineLen) {
+    if(m_currPos >= MaxLineLen) {
         m_hasCompleteLine = true;
         return;
     }
-    if(chr == '\n') {
+    if(chr == '\r') {
         m_hasCompleteLine = true;
         return;
     }
-    m_lineBuffer[m_nextPos] = chr;
-    m_nextPos++;
+    m_lineBuffer[m_currPos++] = chr;
 }
 
 bool LogTransform::hasLine() const
@@ -39,7 +38,8 @@ bool LogTransform::hasLine() const
 char* LogTransform::getLine()
 {
     assert(m_hasCompleteLine);
-    m_lineBuffer[m_nextPos] = 0;
     m_hasCompleteLine = false;
+    m_lineBuffer[m_currPos] = 0;
+    m_currPos = 0;
     return m_lineBuffer;
 }

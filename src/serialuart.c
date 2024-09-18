@@ -10,17 +10,11 @@ queue_t tx_queues[NUM_UARTS];
 static void uart0_interrupt();
 static void uart1_interrupt();
 static void handleTx(uint8_t uartNo);
-
-void serial_uart_enable_interrupt(uint8_t uartNo)
-{
-    uart_inst_t *uart = uart_get_instance(uartNo);
-    irq_set_exclusive_handler(UART_IRQ_NUM(uart), uartNo==0 ? uart0_interrupt : uart1_interrupt);
-    irq_set_enabled(UART_IRQ_NUM(uart), true);
-    uart_set_irqs_enabled(uart, true, true);
-}
+static void serial_uart_enable_interrupt(uint8_t uartNo);
 
 void serial_uart_init(uint8_t uartNo, uint32_t baudrate, uint8_t rxPin, uint8_t txPin)
 {
+    assert(uartNo < NUM_UARTS);
     queue_init(&rx_queues[uartNo], 1, QUEUE_SIZE);
     queue_init(&tx_queues[uartNo], 1, QUEUE_SIZE);
 
@@ -38,6 +32,7 @@ void serial_uart_init(uint8_t uartNo, uint32_t baudrate, uint8_t rxPin, uint8_t 
 
 void startTransmitAfterAddingTransmitData(uint8_t uartNo)
 {
+    assert(uartNo < NUM_UARTS);
     uart_inst_t *uart = uart_get_instance(uartNo);
     assert(uart_is_enabled(uart));
     uart_set_irqs_enabled(uart, true, false);
@@ -55,6 +50,14 @@ queue_t *getTxQueue(uint8_t uartNo)
 {
     assert(uartNo < NUM_UARTS);
     return &tx_queues[uartNo];
+}
+
+static void serial_uart_enable_interrupt(uint8_t uartNo)
+{
+    uart_inst_t *uart = uart_get_instance(uartNo);
+    irq_set_exclusive_handler(UART_IRQ_NUM(uart), uartNo==0 ? uart0_interrupt : uart1_interrupt);
+    irq_set_enabled(UART_IRQ_NUM(uart), true);
+    uart_set_irqs_enabled(uart, true, true);
 }
 
 static void handleRx(uint8_t uartNo)
