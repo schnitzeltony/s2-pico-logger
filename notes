@@ -1,7 +1,3 @@
-https://github.com/raspberrypi/pico-examples/
-
-* Example 'uart_advanced'
-
 * interrupt critical_section 
   https://forums.raspberrypi.com/viewtopic.php?t=334038
   https://github.com/raspberrypi/pico-sdk/blob/master/src/common/pico_util/include/pico/util/queue.h
@@ -9,10 +5,10 @@ https://github.com/raspberrypi/pico-examples/
 * PICO_CONFIG
   https://forums.raspberrypi.com/viewtopic.php?t=362529
 
-* Flash
-  https://github.com/raspberrypi/pico-examples/blob/master/flash/program/flash_program.c
-
 * SDCard
   https://github.com/carlk3/no-OS-FatFS-SD-SDIO-SPI-RPi-Pico
   https://github.com/oyama/pico-vfs?tab=readme-ov-file -> Referenzen
   https://github.com/Memotech-Bill/pico-filesystem
+
+
+
