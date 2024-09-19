@@ -18,6 +18,16 @@ static bool queueToLog(queue_t *queue, LogTransform *log, const char* leadText) 
     return linePrinted;
 }
 
+static void initialLEDDance() {
+    constexpr uint32_t msWait = 100;
+    for(int i=0; i<3; i++) {
+        led_switch(true);
+        sleep_ms(msWait);
+        led_switch(false);
+        sleep_ms(msWait);
+    }
+}
+
 int main() {
     led_init();
 
@@ -26,6 +36,8 @@ int main() {
     constexpr uint8_t SystemCtlUartNo = 1;
     serial_uart_init(LinuxConsoleUartNo, 115200, 1, 0);
     serial_uart_init(SystemCtlUartNo, 9600, 7, 6);
+
+    initialLEDDance();
 
     bool ledOn = true;
     LogTransform *logTransformerSysCtl = new LogTransform;
