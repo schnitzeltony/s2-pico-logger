@@ -30,14 +30,14 @@ static void initialLEDDance() {
 
 int main() {
     led_init();
+    initialLEDDance();
 
-    stdio_usb_init();
     constexpr uint8_t LinuxConsoleUartNo = 0;
     constexpr uint8_t SystemCtlUartNo = 1;
     serial_uart_init(LinuxConsoleUartNo, 115200, 1, 0);
     serial_uart_init(SystemCtlUartNo, 9600, 5, 4);
 
-    initialLEDDance();
+    stdio_usb_init();
 
     bool ledOn = true;
     LogTransform *logTransformerSysCtl = new LogTransform;
