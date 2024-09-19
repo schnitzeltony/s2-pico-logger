@@ -15,7 +15,7 @@ LogTransform::~LogTransform()
 
 void LogTransform::add(char chr)
 {
-    if(chr == 0 || chr == 255)
+    if(chr == 0x00 || chr == 0xFF || chr == '\n')
         return;
     if(m_hasCompleteLine)
         return;
