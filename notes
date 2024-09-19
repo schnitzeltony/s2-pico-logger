@@ -10,6 +10,8 @@
   https://github.com/oyama/pico-vfs?tab=readme-ov-file -> Referenzen
   https://github.com/Memotech-Bill/pico-filesystem
 
+* USB
+  https://www.beyondlogic.org/usbnutshell/usb5.shtml
 
 uart0: S2 Linux
 uart1: S2 Systemcontroller
