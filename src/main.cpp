@@ -35,7 +35,7 @@ int main() {
     constexpr uint8_t LinuxConsoleUartNo = 0;
     constexpr uint8_t SystemCtlUartNo = 1;
     serial_uart_init(LinuxConsoleUartNo, 115200, 1, 0);
-    serial_uart_init(SystemCtlUartNo, 9600, 7, 6);
+    serial_uart_init(SystemCtlUartNo, 9600, 5, 4);
 
     initialLEDDance();
 
