@@ -35,6 +35,7 @@ static void initialLEDDance() {
 int main() {
     led_init();
     initialLEDDance();
+    timeStampGenerator.setCurrentTime("2024-09-20 18:47:14");
 
     constexpr uint8_t LinuxConsoleUartNo = 0;
     constexpr uint8_t SystemCtlUartNo = 1;
