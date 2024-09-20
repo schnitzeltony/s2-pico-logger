@@ -54,11 +54,11 @@ int main() {
     bool ledOn = true;
     while (1) {
         bool ledToggle = false;
-        if(queueToLog(queueSystemCtlIn, lineExtractSysCtl, "SystemController"))
+        if(queueToLog(queueSystemCtlIn, lineExtractSysCtl, "SystemCtrl"))
             ledToggle = true;
-        if(queueToLog(queueLinuxConsoleIn, lineExtractLinux, "Linux"))
+        if(queueToLog(queueLinuxConsoleIn, lineExtractLinux, "LinuxConsole"))
             ledToggle = true;
-        if(queueToLog(queueStdIn, lineExtractStdIn, "StdIn"))
+        if(queueToLog(queueStdIn, lineExtractStdIn, "CmdIn"))
             ledToggle = true;
         if(ledToggle) {
             led_switch(ledOn);
