@@ -1,7 +1,6 @@
 #include "logtimestampgenerator.h"
-#include <ctime>
-#include <sstream>
-#include <iomanip>
+#include "strptime.h"
+#include <stdio.h>
 
 static char timeStrSeconds[sizeof("1970-01-01 00:00:0")+1];
 static char timeStrMs[sizeof("000")+1];
@@ -26,8 +25,8 @@ const char *LogTimeStampGenerator::getTimeStampBaseFormat()
 
 bool LogTimeStampGenerator::setCurrentTime(const char *strCurrentTime)
 {
-    std::tm tm = {};
-    std::stringstream(strCurrentTime) >> std::get_time(&tm, getTimeStampBaseFormat());
+    tm tm = {};
+    strptime(strCurrentTime, getTimeStampBaseFormat(), &tm);
     auto tp = std::chrono::system_clock::from_time_t(std::mktime(&tm));
     std::chrono::system_clock::duration currentSetTime = tp.time_since_epoch();
     if(currentSetTime.count() > 0) {
