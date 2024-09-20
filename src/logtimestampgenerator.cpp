@@ -29,7 +29,7 @@ bool LogTimeStampGenerator::setCurrentTime(const char *strCurrentTime)
     std::tm tm = {};
     std::stringstream(strCurrentTime) >> std::get_time(&tm, getTimeStampBaseFormat());
     auto tp = std::chrono::system_clock::from_time_t(std::mktime(&tm));
-    std::chrono::_V2::system_clock::duration currentSetTime = tp.time_since_epoch();
+    std::chrono::system_clock::duration currentSetTime = tp.time_since_epoch();
     if(currentSetTime.count() > 0) {
         m_currentSetTime = currentSetTime;
         return true;
