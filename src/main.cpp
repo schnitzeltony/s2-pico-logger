@@ -1,6 +1,6 @@
 #include "led.h"
 #include "serialuart.h"
-#include "logtransform.h"
+#include "lineextractor.h"
 #include "stdintoqueue.h"
 #include <stdio.h>
 
@@ -35,13 +35,13 @@ int main() {
 
     constexpr uint8_t LinuxConsoleUartNo = 0;
     constexpr uint8_t SystemCtlUartNo = 1;
-    LogTransform *logTransformerSysCtl = new LogTransform;
-    queue_t *rx_queueSystemCtl = getRxQueue(SystemCtlUartNo);
-    LogTransform *logTransformerLinux = new LogTransform;
-    queue_t *rx_queueLinuxConsole = getRxQueue(LinuxConsoleUartNo);
+    LineExtractor *lineExtractSysCtl = new LineExtractor;
+    queue_t *queueSystemCtlIn = getRxQueue(SystemCtlUartNo);
+    LineExtractor *lineExtractLinux = new LineExtractor;
+    queue_t *queueLinuxConsoleIn = getRxQueue(LinuxConsoleUartNo);
 
     stdio_usb_init();
-    LogTransform *lineStdIn = new LogTransform;
+    LineExtractor *lineExtractStdIn = new LineExtractor;
     queue_t *queueStdIn = StdInToQueue::getInstance()->getQueue();
 
     serial_uart_init(LinuxConsoleUartNo, 115200, 1, 0);
@@ -50,11 +50,11 @@ int main() {
     bool ledOn = true;
     while (1) {
         bool ledToggle = false;
-        if(queueToLog(rx_queueSystemCtl, logTransformerSysCtl, "SystemController"))
+        if(queueToLog(queueSystemCtlIn, lineExtractSysCtl, "SystemController"))
             ledToggle = true;
-        if(queueToLog(rx_queueLinuxConsole, logTransformerLinux, "Linux"))
+        if(queueToLog(queueLinuxConsoleIn, lineExtractLinux, "Linux"))
             ledToggle = true;
-        if(queueToLog(queueStdIn, lineStdIn, "StdIn"))
+        if(queueToLog(queueStdIn, lineExtractStdIn, "StdIn"))
             ledToggle = true;
         if(ledToggle) {
             led_switch(ledOn);

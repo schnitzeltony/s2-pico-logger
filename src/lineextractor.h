@@ -1,11 +1,11 @@
 #ifndef LOGTRANSFORM_H
 #define LOGTRANSFORM_H
 
-class LogTransform
+class LineExtractor
 {
 public:
-    LogTransform();
-    virtual ~LogTransform();
+    LineExtractor();
+    virtual ~LineExtractor();
     void add(char chr);
     const char* tryGetLine();
 

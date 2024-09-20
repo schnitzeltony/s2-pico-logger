@@ -1,19 +1,19 @@
-#include "logtransform.h"
+#include "lineextractor.h"
 #include <pico/assert.h>
 
 constexpr int MaxLineLen = 255;
 
-LogTransform::LogTransform()
+LineExtractor::LineExtractor()
 {
     m_lineBuffer = new char[MaxLineLen+1];
 }
 
-LogTransform::~LogTransform()
+LineExtractor::~LineExtractor()
 {
     delete[] m_lineBuffer;
 }
 
-void LogTransform::add(char chr)
+void LineExtractor::add(char chr)
 {
     if(chr == 0x00 || chr == 0xFF || chr == '\n')
         return;
@@ -30,7 +30,7 @@ void LogTransform::add(char chr)
     m_lineBuffer[m_currPos++] = chr;
 }
 
-const char* LogTransform::tryGetLine()
+const char* LineExtractor::tryGetLine()
 {
     if(!m_hasCompleteLine)
         return nullptr;

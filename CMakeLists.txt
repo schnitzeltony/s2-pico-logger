@@ -32,7 +32,7 @@ pico_sdk_init()
 
 add_executable(s2-pico-logger
     src/led.c
-    src/logtransform.cpp
+    src/lineextractor.cpp
     src/serialuart.c
     src/stdintoqueue.cpp
     src/main.cpp
