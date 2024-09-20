@@ -34,6 +34,7 @@ add_executable(s2-pico-logger
     src/led.c
     src/logtransform.cpp
     src/serialuart.c
+    src/stdintoqueue.cpp
     src/main.cpp
 )
 
