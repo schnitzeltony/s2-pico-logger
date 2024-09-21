@@ -8,18 +8,25 @@
 
 TimeSync timeSync;
 
-static bool queueToLog(queue_t *queue, LineExtractor *log, const char* leadText) {
-    bool linePrinted = false;
+static const char* tryGetLine(queue_t *queue, LineExtractor *log) {
     while(!queue_is_empty(queue)) {
         uint8_t character;
         queue_try_remove(queue, &character);
         log->add(character);
         const char *line = log->tryGetLine();
-        if(line) {
-            linePrinted = true;
-            std::chrono::system_clock::time_point nowSynced = timeSync.getNow();
-            printf("%s %s: %s\r\n", TimeStringGenerator::getTimeStampStr(nowSynced), leadText, line);
-        }
+        if(line)
+            return line;
+    }
+    return nullptr;
+}
+
+static bool queueToLog(queue_t *queue, LineExtractor *log, const char* leadText) {
+    bool linePrinted = false;
+    const char *line = tryGetLine(queue, log);
+    if(line) {
+        linePrinted = true;
+        std::chrono::system_clock::time_point nowSynced = timeSync.getNow();
+        printf("%s %s: %s\r\n", TimeStringGenerator::getTimeStampStr(nowSynced), leadText, line);
     }
     return linePrinted;
 }
