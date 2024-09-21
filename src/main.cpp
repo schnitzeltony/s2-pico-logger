@@ -3,9 +3,10 @@
 #include "lineextractor.h"
 #include "stdintoqueue.h"
 #include "logtimestampgenerator.h"
+#include "timesync.h"
 #include <stdio.h>
 
-LogTimeStampGenerator timeStampGenerator;
+TimeSync timeSync;
 
 static bool queueToLog(queue_t *queue, LineExtractor *log, const char* leadText) {
     bool linePrinted = false;
@@ -16,7 +17,8 @@ static bool queueToLog(queue_t *queue, LineExtractor *log, const char* leadText)
         const char *line = log->tryGetLine();
         if(line) {
             linePrinted = true;
-            printf("%s %s: %s\r\n", timeStampGenerator.getTimeStampStr(), leadText, line);
+            std::chrono::system_clock::time_point nowSynced = timeSync.getNowSynched();
+            printf("%s %s: %s\r\n", LogTimeStampGenerator::getTimeStampStr(nowSynced), leadText, line);
         }
     }
     return linePrinted;
@@ -35,7 +37,7 @@ static void initialLEDDance() {
 int main() {
     led_init();
     initialLEDDance();
-    timeStampGenerator.setCurrentTime("2024-09-20 18:47:14");
+    timeSync.setCurrentTime("2024-09-21 14:00:30");
 
     constexpr uint8_t LinuxConsoleUartNo = 0;
     constexpr uint8_t SystemCtlUartNo = 1;
