@@ -31,13 +31,13 @@ project(s2-pico-logger C CXX ASM)
 pico_sdk_init()
 
 add_executable(s2-pico-logger
+    src/io/led.c
+    src/io/serialuart.c
+    src/io/stdintoqueue.cpp
     src/time/strptime.c
     src/time/timestringgenerator.cpp
     src/time/timesync.cpp
-    src/led.c
     src/lineextractor.cpp
-    src/serialuart.c
-    src/stdintoqueue.cpp
     src/stringutils.cpp
     src/main.cpp
 )
@@ -45,6 +45,7 @@ add_executable(s2-pico-logger
 target_include_directories(s2-pico-logger
     PRIVATE
     src
+    src/io
     src/time
 )
 
