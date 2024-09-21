@@ -20,13 +20,17 @@ static const char* tryGetLine(queue_t *queue, LineExtractor *log) {
     return nullptr;
 }
 
+static void logOutput(const char* leadText, const char*  line) {
+    std::chrono::system_clock::time_point nowSynced = timeSync.getNow();
+    printf("%s %s: %s\r\n", TimeStringGenerator::getTimeStampStr(nowSynced), leadText, line);
+}
+
 static bool queueToLog(queue_t *queue, LineExtractor *log, const char* leadText) {
     bool linePrinted = false;
     const char *line = tryGetLine(queue, log);
     if(line) {
         linePrinted = true;
-        std::chrono::system_clock::time_point nowSynced = timeSync.getNow();
-        printf("%s %s: %s\r\n", TimeStringGenerator::getTimeStampStr(nowSynced), leadText, line);
+        logOutput(leadText, line);
     }
     return linePrinted;
 }
