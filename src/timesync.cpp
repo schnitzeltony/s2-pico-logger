@@ -12,7 +12,7 @@ bool TimeSync::setCurrentTime(const char *timeString)
 {
     tm timeStruct = {};
     convertTimeStringToTimeStruct(timeString, timeStruct);
-    const auto durationSinceEpoch = getDurationEpoch(timeStruct);
+    const auto durationSinceEpoch = getDurationSinceEpoch(timeStruct);
     if(durationSinceEpoch.count() > 0) {
         m_currDurationSinceEpoch = durationSinceEpoch;
         return true;
@@ -30,7 +30,7 @@ void TimeSync::convertTimeStringToTimeStruct(const char *timeString, tm &timeStr
     strptime(timeString, getTimeStampSyncFormat(), &timeStruct);
 }
 
-system_clock::duration TimeSync::getDurationEpoch(const tm &timeStruct)
+system_clock::duration TimeSync::getDurationSinceEpoch(const tm &timeStruct)
 {
     const time_t timeT = std::mktime(const_cast<tm *>(&timeStruct)); // std::mktime no const argument
     const auto timePoint = system_clock::from_time_t(timeT);
