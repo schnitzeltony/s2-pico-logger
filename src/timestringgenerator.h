@@ -1,14 +1,15 @@
-#ifndef LOGTIMESTAMPGENERATOR_H
-#define LOGTIMESTAMPGENERATOR_H
+#ifndef TimeStringGenerator_H
+#define TimeStringGenerator_H
 
 #include <chrono>
 
-class LogTimeStampGenerator {
+class TimeStringGenerator {
 public:
     static const char* getTimeStampStr(const std::chrono::system_clock::time_point &time);
 private:
     static const char* getTimeStampBaseFormat();
     static const tm* getLocalImeStruct(const std::chrono::system_clock::time_point &time);
+    static const std::chrono::milliseconds getMsPart(const std::chrono::system_clock::time_point &time);
 };
 
-#endif // LOGTIMESTAMPGENERATOR_H
+#endif // TimeStringGenerator_H

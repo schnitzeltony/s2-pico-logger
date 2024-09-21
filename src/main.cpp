@@ -2,7 +2,7 @@
 #include "serialuart.h"
 #include "lineextractor.h"
 #include "stdintoqueue.h"
-#include "logtimestampgenerator.h"
+#include "timestringgenerator.h"
 #include "timesync.h"
 #include <stdio.h>
 
@@ -18,7 +18,7 @@ static bool queueToLog(queue_t *queue, LineExtractor *log, const char* leadText)
         if(line) {
             linePrinted = true;
             std::chrono::system_clock::time_point nowSynced = timeSync.getNow();
-            printf("%s %s: %s\r\n", LogTimeStampGenerator::getTimeStampStr(nowSynced), leadText, line);
+            printf("%s %s: %s\r\n", TimeStringGenerator::getTimeStampStr(nowSynced), leadText, line);
         }
     }
     return linePrinted;
