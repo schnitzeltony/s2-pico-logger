@@ -5,10 +5,9 @@ static char timeStrSeconds[sizeof("1970-01-01 00:00:00")+1];
 static char timeStrMs[sizeof("000")+1];
 static char timeStrTotal[sizeof(timeStrSeconds)+ sizeof(timeStrMs)];
 
-const char *LogTimeStampGenerator::getTimeStampStr(std::chrono::system_clock::time_point time)
+const char *LogTimeStampGenerator::getTimeStampStr(const std::chrono::system_clock::time_point &time)
 {
-    time_t timeT = std::chrono::system_clock::to_time_t(time);
-    const struct tm *lTime = localtime(&timeT);
+    const struct tm *lTime = getLocalImeStruct(time);
     strftime(timeStrSeconds, sizeof(timeStrSeconds), getTimeStampBaseFormat(), lTime);
     const auto nowMs = std::chrono::duration_cast<std::chrono::milliseconds>(time.time_since_epoch()) % 1000;
     sprintf(timeStrMs, "%03d", nowMs.count());
@@ -19,4 +18,10 @@ const char *LogTimeStampGenerator::getTimeStampStr(std::chrono::system_clock::ti
 const char *LogTimeStampGenerator::getTimeStampBaseFormat()
 {
     return "%Y-%m-%d %H:%M:%S";
+}
+
+const tm *LogTimeStampGenerator::getLocalImeStruct(const std::chrono::system_clock::time_point &time)
+{
+    const time_t timeT = std::chrono::system_clock::to_time_t(time);
+    return localtime(&timeT); // man localtime: static => no delete / not thread safe
 }
