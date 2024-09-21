@@ -8,7 +8,7 @@ static char timeStrTotal[sizeof(timeStrSeconds)+ sizeof(timeStrMs)];
 
 const char* LogTimeStampGenerator::getTimeStampStr() const
 {
-    const auto nowSynched = std::chrono::system_clock::now() + m_currentSetTime;
+    const auto nowSynched = getNowSynched();
     time_t timeT = std::chrono::system_clock::to_time_t(nowSynched);
     const struct tm *lTime = localtime(&timeT);
     strftime(timeStrSeconds, 256, getTimeStampBaseFormat(), lTime);
@@ -16,6 +16,11 @@ const char* LogTimeStampGenerator::getTimeStampStr() const
     sprintf(timeStrMs, "%03d", nowMs.count());
     sprintf(timeStrTotal, "%s.%s", timeStrSeconds, timeStrMs);
     return timeStrTotal;
+}
+
+std::chrono::system_clock::time_point LogTimeStampGenerator::getNowSynched() const
+{
+    return std::chrono::system_clock::now() + m_currentSetTime;
 }
 
 const char *LogTimeStampGenerator::getTimeStampBaseFormat()
