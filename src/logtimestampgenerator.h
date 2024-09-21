@@ -5,6 +5,9 @@
 
 class LogTimeStampGenerator {
 public:
+    static const char* getTimeStampStr(std::chrono::system_clock::time_point time);
+
+
     std::chrono::system_clock::time_point getNowSynched() const;
     const char* getTimeStampStr() const;
     static const char* getTimeStampBaseFormat();

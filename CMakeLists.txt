@@ -37,6 +37,7 @@ add_executable(s2-pico-logger
     src/serialuart.c
     src/stdintoqueue.cpp
     src/strptime.c
+    src/timesync.cpp
     src/main.cpp
 )
 

@@ -9,10 +9,15 @@ static char timeStrTotal[sizeof(timeStrSeconds)+ sizeof(timeStrMs)];
 const char* LogTimeStampGenerator::getTimeStampStr() const
 {
     const auto nowSynched = getNowSynched();
-    time_t timeT = std::chrono::system_clock::to_time_t(nowSynched);
+    return getTimeStampStr(nowSynched);
+}
+
+const char *LogTimeStampGenerator::getTimeStampStr(std::chrono::system_clock::time_point time)
+{
+    time_t timeT = std::chrono::system_clock::to_time_t(time);
     const struct tm *lTime = localtime(&timeT);
     strftime(timeStrSeconds, 256, getTimeStampBaseFormat(), lTime);
-    const auto nowMs = std::chrono::duration_cast<std::chrono::milliseconds>(nowSynched.time_since_epoch()) % 1000;
+    const auto nowMs = std::chrono::duration_cast<std::chrono::milliseconds>(time.time_since_epoch()) % 1000;
     sprintf(timeStrMs, "%03d", nowMs.count());
     sprintf(timeStrTotal, "%s.%s", timeStrSeconds, timeStrMs);
     return timeStrTotal;
