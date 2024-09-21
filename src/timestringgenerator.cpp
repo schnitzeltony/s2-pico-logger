@@ -7,7 +7,7 @@ static char timeStrTotal[sizeof(timeStrSeconds)+ sizeof(timeStrMs)];
 
 const char *TimeStringGenerator::getTimeStampStr(const std::chrono::system_clock::time_point &time)
 {
-    const struct tm *lTime = getLocalImeStruct(time);
+    const struct tm *lTime = getLocalTimeStruct(time);
     const auto nowMs = getMsPart(time);
     strftime(timeStrSeconds, sizeof(timeStrSeconds), getTimeStampBaseFormat(), lTime);
     sprintf(timeStrMs, "%03d", nowMs.count());
@@ -20,7 +20,7 @@ const char *TimeStringGenerator::getTimeStampBaseFormat()
     return "%Y-%m-%d %H:%M:%S";
 }
 
-const tm *TimeStringGenerator::getLocalImeStruct(const std::chrono::system_clock::time_point &time)
+const tm *TimeStringGenerator::getLocalTimeStruct(const std::chrono::system_clock::time_point &time)
 {
     const time_t timeT = std::chrono::system_clock::to_time_t(time);
     return localtime(&timeT); // man localtime: static => no delete / not thread safe
