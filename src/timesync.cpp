@@ -9,7 +9,6 @@ std::chrono::system_clock::time_point TimeSync::getNow() const
 bool TimeSync::setCurrentTime(const char *strTimeStamp)
 {
     tm timeStruct = {};
-    convertTimeStampToTime(strTimeStamp, timeStruct);
     strptime(strTimeStamp, getTimeStampSyncFormat(), &timeStruct);
     auto timePoint = std::chrono::system_clock::from_time_t(std::mktime(&timeStruct));
     std::chrono::system_clock::duration durationSinceEpoch = timePoint.time_since_epoch();
@@ -23,9 +22,4 @@ bool TimeSync::setCurrentTime(const char *strTimeStamp)
 const char *TimeSync::getTimeStampSyncFormat()
 {
     return "%Y-%m-%d %H:%M:%S";
-}
-
-void TimeSync::convertTimeStampToTime(const char *timeStamp, tm &timeStruct)
-{
-    strptime(timeStamp, getTimeStampSyncFormat(), &timeStruct);
 }
