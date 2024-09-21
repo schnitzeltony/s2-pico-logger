@@ -5,11 +5,12 @@
 
 class TimeSync {
 public:
-    std::chrono::system_clock::time_point getNowSynched() const;
-    bool setCurrentTime(const char* strCurrentTime);
+    std::chrono::system_clock::time_point getNow() const;
+    bool setCurrentTime(const char* strTimeStamp);
 private:
     static const char* getTimeStampSyncFormat();
-    std::chrono::system_clock::duration m_currentSetTime;
+    static void convertTimeStampToTime(const char* timeStamp, tm &timeStruct);
+    std::chrono::system_clock::duration m_currDurationSinceEpoch;
 };
 
 #endif // TIMESYNC_H

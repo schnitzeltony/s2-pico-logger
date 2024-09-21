@@ -1,9 +1,23 @@
 #include "timesync.h"
 #include "strptime.h"
 
-std::chrono::system_clock::time_point TimeSync::getNowSynched() const
+std::chrono::system_clock::time_point TimeSync::getNow() const
 {
-    return std::chrono::system_clock::now() + m_currentSetTime;
+    return std::chrono::system_clock::now() + m_currDurationSinceEpoch;
+}
+
+bool TimeSync::setCurrentTime(const char *strTimeStamp)
+{
+    tm timeStruct = {};
+    convertTimeStampToTime(strTimeStamp, timeStruct);
+    strptime(strTimeStamp, getTimeStampSyncFormat(), &timeStruct);
+    auto timePoint = std::chrono::system_clock::from_time_t(std::mktime(&timeStruct));
+    std::chrono::system_clock::duration durationSinceEpoch = timePoint.time_since_epoch();
+    if(durationSinceEpoch.count() > 0) {
+        m_currDurationSinceEpoch = durationSinceEpoch;
+        return true;
+    }
+    return false;
 }
 
 const char *TimeSync::getTimeStampSyncFormat()
@@ -11,15 +25,7 @@ const char *TimeSync::getTimeStampSyncFormat()
     return "%Y-%m-%d %H:%M:%S";
 }
 
-bool TimeSync::setCurrentTime(const char *strCurrentTime)
+void TimeSync::convertTimeStampToTime(const char *timeStamp, tm &timeStruct)
 {
-    tm tm = {};
-    strptime(strCurrentTime, getTimeStampSyncFormat(), &tm);
-    auto tp = std::chrono::system_clock::from_time_t(std::mktime(&tm));
-    std::chrono::system_clock::duration currentSetTime = tp.time_since_epoch();
-    if(currentSetTime.count() > 0) {
-        m_currentSetTime = currentSetTime;
-        return true;
-    }
-    return false;
+    strptime(timeStamp, getTimeStampSyncFormat(), &timeStruct);
 }

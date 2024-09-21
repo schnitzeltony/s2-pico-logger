@@ -1,5 +1,4 @@
 #include "logtimestampgenerator.h"
-#include "strptime.h"
 #include <stdio.h>
 
 static char timeStrSeconds[sizeof("1970-01-01 00:00:0")+1];

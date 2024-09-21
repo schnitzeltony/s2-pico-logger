@@ -17,7 +17,7 @@ static bool queueToLog(queue_t *queue, LineExtractor *log, const char* leadText)
         const char *line = log->tryGetLine();
         if(line) {
             linePrinted = true;
-            std::chrono::system_clock::time_point nowSynced = timeSync.getNowSynched();
+            std::chrono::system_clock::time_point nowSynced = timeSync.getNow();
             printf("%s %s: %s\r\n", LogTimeStampGenerator::getTimeStampStr(nowSynced), leadText, line);
         }
     }
