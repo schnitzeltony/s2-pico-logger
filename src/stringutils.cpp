@@ -4,7 +4,7 @@
 std::string StringUtils::toUpper(const std::string &str)
 {
     std::string ret;
-    const int size = ret.size();
+    const int size = str.size();
     ret.resize(size);
     for(int i=0; i<size; ++i)
         ret[i] = toupper(str[i]);
@@ -14,7 +14,7 @@ std::string StringUtils::toUpper(const std::string &str)
 std::string StringUtils::toLower(const std::string &str)
 {
     std::string ret;
-    const int size = ret.size();
+    const int size = str.size();
     ret.resize(size);
     for(int i=0; i<size; ++i)
         ret[i] = tolower(str[i]);
