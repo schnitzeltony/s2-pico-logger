@@ -4,9 +4,11 @@
 #include "stdintoqueue.h"
 #include "timestringgenerator.h"
 #include "timesync.h"
+#include "commandparser.h"
 #include <stdio.h>
 
 TimeSync timeSync;
+CommandParser cmdParser;
 
 static const char* tryGetLine(queue_t *queue, LineExtractor *log) {
     while(!queue_is_empty(queue)) {
@@ -20,7 +22,7 @@ static const char* tryGetLine(queue_t *queue, LineExtractor *log) {
     return nullptr;
 }
 
-static void logOutput(const char* leadText, const char*  line) {
+static void logOutput(const char* leadText, const char* line) {
     std::chrono::system_clock::time_point nowSynced = timeSync.getNow();
     printf("%s %s: %s\r\n", TimeStringGenerator::getTimeStampStr(nowSynced), leadText, line);
 }
@@ -48,6 +50,8 @@ static void initialLEDDance() {
 int main() {
     led_init();
     initialLEDDance();
+    cmdParser.addCmd(Command("SYNC", 1, nullptr, nullptr));
+
     timeSync.setCurrentTime("2024-09-21 14:00:30");
 
     constexpr uint8_t LinuxConsoleUartNo = 0;
@@ -71,8 +75,14 @@ int main() {
             ledToggle = true;
         if(queueToLog(queueLinuxConsoleIn, lineExtractLinux, "LinuxConsole"))
             ledToggle = true;
-        if(queueToLog(queueStdIn, lineExtractStdIn, "CmdIn"))
+
+        const char* cmdLineIn = tryGetLine(queueStdIn, lineExtractStdIn);
+        if(cmdLineIn) {
             ledToggle = true;
+            if(!cmdParser.decodeExecuteLine(cmdLineIn))
+                logOutput("Command failed", cmdLineIn);
+        }
+
         if(ledToggle) {
             led_switch(ledOn);
             ledOn = !ledOn;
