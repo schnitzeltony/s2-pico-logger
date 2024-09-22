@@ -1,5 +1,6 @@
 #include "commandparser.h"
 #include "stringutils.h"
+#include "logger.h"
 
 void CommandParser::addCmd(const Command &cmd)
 {
@@ -13,7 +14,12 @@ bool CommandParser::decodeExecuteLine(const char *line)
     std::string cmdLabel = StringUtils::toUpper(tokens[0]);
     for(auto &cmd : m_commands) {   
         if(cmdLabel == cmd.m_cmdLabel) {
-            printf("command found\r\n");
+            int paramCount = tokens.size()-1;
+            if(paramCount == cmd.m_paramCount) {
+
+            }
+            else
+                Logger::logOutput("CmdParser", "Parameter count wrong");
         }
     }
     return false;
