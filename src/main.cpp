@@ -44,7 +44,7 @@ static void initialLEDDance() {
 int main() {
     led_init();
     initialLEDDance();
-    cmdParser.addCmd(Command("SYNC", 1, nullptr, nullptr));
+    cmdParser.addCmd(Command("SETTIME", 1, nullptr, nullptr));
 
     Logger::setCurrTime("2024-09-21 14:00:30");
 

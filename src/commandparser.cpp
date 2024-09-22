@@ -16,10 +16,10 @@ bool CommandParser::decodeExecuteLine(const char *line)
         if(cmdLabel == cmd.m_cmdLabel) {
             int paramCount = tokens.size()-1;
             if(paramCount == cmd.m_paramCount) {
-
+                Logger::logOutput(cmdLabel.data(), "Supi Dupi");
             }
             else
-                Logger::logOutput("CmdParser", "Parameter count wrong");
+                Logger::logOutput(cmdLabel.data(), "Parameter count wrong");
         }
     }
     return false;
