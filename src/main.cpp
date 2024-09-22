@@ -2,7 +2,6 @@
 #include "serialuart.h"
 #include "lineextractor.h"
 #include "stdintoqueue.h"
-#include "timestringgenerator.h"
 #include "logger.h"
 #include "commandparser.h"
 #include <stdio.h>
