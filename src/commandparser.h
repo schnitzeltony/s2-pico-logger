@@ -11,6 +11,7 @@ public:
 private:
     static void toUpper(std::string &str);
     static bool startsWith(const std::string str, const std::string strSearch);
+    static void finishCmd(const char* cmdLabel, bool cmdSucceeded, const char* errorDetails);
 
     std::vector<Command> m_commands;
 };

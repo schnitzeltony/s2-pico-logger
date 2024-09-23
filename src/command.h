@@ -9,7 +9,7 @@ class Command {
 public:
     Command(std::string cmdLabel,
             int paramCount,
-            std::function<bool(void*, std::vector<std::string> cmdParams)> callback, 
+            std::function<bool(void* param, std::vector<std::string> cmdParams)> callback,
             void* callbackParam);
     friend class CommandParser;
 private:

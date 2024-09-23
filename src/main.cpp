@@ -43,9 +43,10 @@ static void initialLEDDance() {
 int main() {
     led_init();
     initialLEDDance();
-    cmdParser.addCmd(Command("SETTIME", 1, nullptr, nullptr));
-
-    Logger::setCurrTime("2024-09-21 14:00:30");
+    cmdParser.addCmd(Command("SETTIME", 1, [&](void* param, std::vector<std::string> cmdParams) {
+        (void) param;
+        return Logger::setCurrTime(cmdParams.front().data());
+    }, nullptr));
 
     constexpr uint8_t LinuxConsoleUartNo = 0;
     constexpr uint8_t SystemCtlUartNo = 1;
