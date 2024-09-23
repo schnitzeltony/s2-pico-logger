@@ -26,7 +26,7 @@ bool CommandParser::decodeExecuteLine(const char *line)
                 return cmdSucceeded;
             }
             else
-                Logger::logOutput(cmdLabel.data(), "Parameter count wrong");
+                finishCmd(cmdLabel.data(), false, "Wrong parameter count");
         }
     }
     return false;
