@@ -15,6 +15,16 @@ void led_switch(bool on)
     gpio_put(PICO_DEFAULT_LED_PIN, on);
 }
 
+void led_initialDance() {
+    const uint32_t msWait = 100;
+    for(int i=0; i<3; i++) {
+        led_switch(true);
+        sleep_ms(msWait);
+        led_switch(false);
+        sleep_ms(msWait);
+    }
+}
+
 #elif defined(CYW43_WL_GPIO_LED_PIN) // Pico W
 void led_init(void)
 {

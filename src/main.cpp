@@ -16,16 +16,6 @@ static bool queueToLog(queue_t *queue, LineFromQueue *queueLine, const char* lea
     return linePrinted;
 }
 
-static void initialLEDDance() {
-    constexpr uint32_t msWait = 100;
-    for(int i=0; i<3; i++) {
-        led_switch(true);
-        sleep_ms(msWait);
-        led_switch(false);
-        sleep_ms(msWait);
-    }
-}
-
 LineFromQueue lineFromLinux;
 LineFromQueue lineFromSysCtl;
 LineFromQueue linesFromCmd;
@@ -33,7 +23,7 @@ CommandParser cmdParser;
 
 int main() {
     led_init();
-    initialLEDDance();
+    led_initialDance();
     cmdParser.addCmd(Command("SETTIME", 1, [&](void* param, std::vector<std::string> cmdParams) {
         (void) param;
         return Logger::setCurrTime(cmdParams.front().data());
