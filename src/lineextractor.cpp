@@ -1,18 +1,6 @@
 #include "lineextractor.h"
 #include <pico/assert.h>
 
-constexpr int MaxLineLen = 255;
-
-LineExtractor::LineExtractor()
-{
-    m_lineBuffer = new char[MaxLineLen+1];
-}
-
-LineExtractor::~LineExtractor()
-{
-    delete[] m_lineBuffer;
-}
-
 void LineExtractor::add(char chr)
 {
     if(chr == 0x00 || chr == 0xFF || chr == '\n')
