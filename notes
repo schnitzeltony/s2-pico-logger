@@ -1,3 +1,4 @@
+Links found on the journey
 * interrupt critical_section 
   https://forums.raspberrypi.com/viewtopic.php?t=334038
   https://github.com/raspberrypi/pico-sdk/blob/master/src/common/pico_util/include/pico/util/queue.h
@@ -13,6 +14,14 @@
 * USB
   https://www.beyondlogic.org/usbnutshell/usb5.shtml
 
-uart0: S2 Linux
-uart1: S2 Systemcontroller
-uart_usb: Debug / I/O / Time-Sync
+UART Layout:
+uart0: In S2 Linux / Out not used
+uart1: In S2 Systemcontroller / Out Log output as
+                                  * Heap Memory consumption
+                                  * Ring-buffer fill state
+                                  * S2 Power state change
+                                  * Start/Stop Listen or two ring-buffers?
+uart_usb: Commands:
+* SETTIME
+* GETLOG ->  First line char count / Keep ring-buffer positions / multiple call allowed / Linux -> log file / Client Solve multiple line response
+* FREELOG -> Ensure LINUX has stored
