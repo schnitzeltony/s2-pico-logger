@@ -32,10 +32,11 @@ bool CommandParser::decodeExecuteLine(const char *line)
     return false;
 }
 
-void CommandParser::outCmdResponse(const char* cmdLabel, bool cmdSucceeded, const char *errorDetails)
+void CommandParser::outCmdResponse(const char *cmdLabel, bool cmdSucceeded, const char *resultDetails)
 {
-    if(cmdSucceeded)
-        printf("%s,OK\r\n", cmdLabel);
+    const char* okErrorLabel = cmdSucceeded ? "OK" : "ERROR";
+    if(resultDetails && *resultDetails)
+        printf("%s,%s: %s\r\n", cmdLabel, okErrorLabel, resultDetails);
     else
-        printf("%s,ERROR: %s\r\n", cmdLabel, errorDetails);
+        printf("%s,%s\r\n", cmdLabel, okErrorLabel);
 }
