@@ -6,6 +6,9 @@
 #include "commandparser.h"
 #include <stdio.h>
 
+TimeSync systemTime;
+Logger logger(&systemTime);
+
 static StdInToQueue stdioQueueWrapper(256);
 static constexpr uint8_t LinuxConsoleUartNo = 0;
 static constexpr uint8_t SystemCtlUartNo = 1;
@@ -25,7 +28,7 @@ static bool queueToLog(LineFromQueue *queueLine, const char* leadText) {
     const char *line = queueLine->tryGetLine();
     if(line) {
         linePrinted = true;
-        Logger::logOutput(leadText, line);
+        logger.logOutput(leadText, line);
     }
     return linePrinted;
 }
@@ -34,9 +37,9 @@ int main() {
     led_init();
     led_initialDance();
     cmdParser.addCmd(Command("SETTIME", 1, [&](void* param, std::vector<std::string> cmdParams) {
-        (void) param;
-        return Logger::setCurrTime(cmdParams.front().data());
-    }, nullptr));
+        return systemTime.setCurrentTime(cmdParams.front().data());
+    },
+    nullptr));
 
     stdio_usb_init();
     serial_uart_init(LinuxConsoleUartNo, 115200, 1, 0);
@@ -54,7 +57,7 @@ int main() {
         if(cmdLineIn) {
             ledToggle = true;
             if(!cmdParser.decodeExecuteLine(cmdLineIn))
-                Logger::logOutput("Could not process input", cmdLineIn);
+                logger.logOutput("Could not process input", cmdLineIn);
         }
 
         if(ledToggle) {
