@@ -14,15 +14,15 @@ static queue_t *queueStdIn = stdioQueueWrapper.getQueue();
 static queue_t *queueSystemCtlIn = getRxQueue(SystemCtlUartNo);
 static queue_t *queueLinuxConsoleIn = getRxQueue(LinuxConsoleUartNo);
 
-static LineFromQueue lineFromLinux;
-static LineFromQueue lineFromSysCtl;
-static LineFromQueue linesFromCmd;
+static LineFromQueue linesFromCmd(queueStdIn);
+static LineFromQueue lineFromSysCtl(queueSystemCtlIn);
+static LineFromQueue lineFromLinux(queueLinuxConsoleIn);
 
 static CommandParser cmdParser;
 
-static bool queueToLog(queue_t *queue, LineFromQueue *queueLine, const char* leadText) {
+static bool queueToLog(LineFromQueue *queueLine, const char* leadText) {
     bool linePrinted = false;
-    const char *line = queueLine->tryGetLine(queue);
+    const char *line = queueLine->tryGetLine();
     if(line) {
         linePrinted = true;
         Logger::logOutput(leadText, line);
@@ -46,12 +46,12 @@ int main() {
     bool ledOn = true;
     while (1) {
         bool ledToggle = false;
-        if(queueToLog(queueSystemCtlIn, &lineFromSysCtl, "SystemCtrl"))
+        if(queueToLog(&lineFromSysCtl, "SystemCtrl"))
             ledToggle = true;
-        if(queueToLog(queueLinuxConsoleIn, &lineFromLinux, "LinuxConsole"))
+        if(queueToLog(&lineFromLinux, "LinuxConsole"))
             ledToggle = true;
 
-        const char* cmdLineIn = linesFromCmd.tryGetLine(queueStdIn);
+        const char* cmdLineIn = linesFromCmd.tryGetLine();
         if(cmdLineIn) {
             ledToggle = true;
             if(!cmdParser.decodeExecuteLine(cmdLineIn))

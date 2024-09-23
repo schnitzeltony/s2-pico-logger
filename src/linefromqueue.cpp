@@ -1,10 +1,15 @@
 #include "linefromqueue.h"
 
-const char *LineFromQueue::tryGetLine(queue_t *queue)
+LineFromQueue::LineFromQueue(queue_t *queue) :
+    m_queue(queue)
 {
-    while(!queue_is_empty(queue)) {
+}
+
+const char *LineFromQueue::tryGetLine()
+{
+    while(!queue_is_empty(m_queue)) {
         uint8_t character;
-        queue_try_remove(queue, &character);
+        queue_try_remove(m_queue, &character);
         m_lineExtractor.add(character);
         const char *line = m_lineExtractor.tryGetLine();
         if(line)

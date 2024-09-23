@@ -7,10 +7,12 @@
 class LineFromQueue
 {
 public:
-    const char* tryGetLine(queue_t *queue);
+    LineFromQueue(queue_t *queue);
+    const char* tryGetLine();
 
 private:
     LineExtractor m_lineExtractor;
+    queue_t *m_queue;
 };
 
 #endif // LINEFROMQUEUE_H
