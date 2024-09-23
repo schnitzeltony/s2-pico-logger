@@ -1,5 +1,5 @@
-#ifndef LOGTRANSFORM_H
-#define LOGTRANSFORM_H
+#ifndef LINEEXTRACTOR_H
+#define LINEEXTRACTOR_H
 
 class LineExtractor
 {
@@ -15,4 +15,4 @@ private:
     bool m_hasCompleteLine = false;
 };
 
-#endif // LOGTRANSFORM_H
+#endif // LINEEXTRACTOR_H
