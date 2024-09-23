@@ -35,9 +35,9 @@ void TimeSync::convertTimeStringToTimeStruct(const char *timeString, tm &timeStr
     strptime(timeString, getTimeStampSyncFormat(), &timeStruct);
 }
 
-system_clock::duration TimeSync::getDurationSinceEpoch(const tm &timeStruct)
+system_clock::duration TimeSync::getDurationSinceEpoch(tm timeStruct)
 {
-    const time_t timeT = std::mktime(const_cast<tm *>(&timeStruct)); // std::mktime no const argument
+    const time_t timeT = std::mktime(&timeStruct);
     const auto timePoint = system_clock::from_time_t(timeT);
     return timePoint.time_since_epoch();
 }
