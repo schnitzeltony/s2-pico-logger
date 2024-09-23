@@ -6,6 +6,20 @@
 #include "commandparser.h"
 #include <stdio.h>
 
+StdInToQueue stdioQueueWrapper(256);
+constexpr uint8_t LinuxConsoleUartNo = 0;
+constexpr uint8_t SystemCtlUartNo = 1;
+
+queue_t *queueStdIn = stdioQueueWrapper.getQueue();
+queue_t *queueSystemCtlIn = getRxQueue(SystemCtlUartNo);
+queue_t *queueLinuxConsoleIn = getRxQueue(LinuxConsoleUartNo);
+
+LineFromQueue lineFromLinux;
+LineFromQueue lineFromSysCtl;
+LineFromQueue linesFromCmd;
+
+CommandParser cmdParser;
+
 static bool queueToLog(queue_t *queue, LineFromQueue *queueLine, const char* leadText) {
     bool linePrinted = false;
     const char *line = queueLine->tryGetLine(queue);
@@ -16,11 +30,6 @@ static bool queueToLog(queue_t *queue, LineFromQueue *queueLine, const char* lea
     return linePrinted;
 }
 
-LineFromQueue lineFromLinux;
-LineFromQueue lineFromSysCtl;
-LineFromQueue linesFromCmd;
-CommandParser cmdParser;
-
 int main() {
     led_init();
     led_initialDance();
@@ -29,13 +38,7 @@ int main() {
         return Logger::setCurrTime(cmdParams.front().data());
     }, nullptr));
 
-    constexpr uint8_t LinuxConsoleUartNo = 0;
-    constexpr uint8_t SystemCtlUartNo = 1;
-    queue_t *queueSystemCtlIn = getRxQueue(SystemCtlUartNo);
-    queue_t *queueLinuxConsoleIn = getRxQueue(LinuxConsoleUartNo);
-
     stdio_usb_init();
-    queue_t *queueStdIn = StdInToQueue::getInstance()->getQueue();
 
     serial_uart_init(LinuxConsoleUartNo, 115200, 1, 0);
     serial_uart_init(SystemCtlUartNo, 9600, 5, 4);

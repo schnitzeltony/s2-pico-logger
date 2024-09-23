@@ -7,11 +7,10 @@
 class StdInToQueue
 {
 public:
-    static StdInToQueue* getInstance(); // not thread safe!
+    StdInToQueue(int queueSize);
     queue_t* getQueue();
     
 private:
-    StdInToQueue(int queueSize);
     static void handleInput(void *param);
     queue_t m_queue;
     static StdInToQueue* m_instance;

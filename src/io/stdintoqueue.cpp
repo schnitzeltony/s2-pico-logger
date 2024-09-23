@@ -1,13 +1,5 @@
 #include "stdintoqueue.h"
 
-StdInToQueue* StdInToQueue::m_instance = nullptr;
-
-StdInToQueue *StdInToQueue::getInstance() {
-    if(!m_instance)
-        m_instance = new StdInToQueue(256);
-    return m_instance;
-}
-
 StdInToQueue::StdInToQueue(int queueSize) {
     queue_init(&m_queue, 1, queueSize);
     stdio_set_chars_available_callback(StdInToQueue::handleInput, &m_queue);
