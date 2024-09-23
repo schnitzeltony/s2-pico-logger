@@ -6,19 +6,19 @@
 #include "commandparser.h"
 #include <stdio.h>
 
-StdInToQueue stdioQueueWrapper(256);
-constexpr uint8_t LinuxConsoleUartNo = 0;
-constexpr uint8_t SystemCtlUartNo = 1;
+static StdInToQueue stdioQueueWrapper(256);
+static constexpr uint8_t LinuxConsoleUartNo = 0;
+static constexpr uint8_t SystemCtlUartNo = 1;
 
-queue_t *queueStdIn = stdioQueueWrapper.getQueue();
-queue_t *queueSystemCtlIn = getRxQueue(SystemCtlUartNo);
-queue_t *queueLinuxConsoleIn = getRxQueue(LinuxConsoleUartNo);
+static queue_t *queueStdIn = stdioQueueWrapper.getQueue();
+static queue_t *queueSystemCtlIn = getRxQueue(SystemCtlUartNo);
+static queue_t *queueLinuxConsoleIn = getRxQueue(LinuxConsoleUartNo);
 
-LineFromQueue lineFromLinux;
-LineFromQueue lineFromSysCtl;
-LineFromQueue linesFromCmd;
+static LineFromQueue lineFromLinux;
+static LineFromQueue lineFromSysCtl;
+static LineFromQueue linesFromCmd;
 
-CommandParser cmdParser;
+static CommandParser cmdParser;
 
 static bool queueToLog(queue_t *queue, LineFromQueue *queueLine, const char* leadText) {
     bool linePrinted = false;
