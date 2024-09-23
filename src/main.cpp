@@ -1,28 +1,14 @@
 #include "led.h"
 #include "serialuart.h"
-#include "lineextractor.h"
+#include "linefromqueue.h"
 #include "stdintoqueue.h"
 #include "logger.h"
 #include "commandparser.h"
 #include <stdio.h>
 
-CommandParser cmdParser;
-
-static const char* tryGetLine(queue_t *queue, LineExtractor *log) {
-    while(!queue_is_empty(queue)) {
-        uint8_t character;
-        queue_try_remove(queue, &character);
-        log->add(character);
-        const char *line = log->tryGetLine();
-        if(line)
-            return line;
-    }
-    return nullptr;
-}
-
-static bool queueToLog(queue_t *queue, LineExtractor *log, const char* leadText) {
+static bool queueToLog(queue_t *queue, LineFromQueue *queueLine, const char* leadText) {
     bool linePrinted = false;
-    const char *line = tryGetLine(queue, log);
+    const char *line = queueLine->tryGetLine(queue);
     if(line) {
         linePrinted = true;
         Logger::logOutput(leadText, line);
@@ -40,6 +26,11 @@ static void initialLEDDance() {
     }
 }
 
+LineFromQueue lineFromLinux;
+LineFromQueue lineFromSysCtl;
+LineFromQueue linesFromCmd;
+CommandParser cmdParser;
+
 int main() {
     led_init();
     initialLEDDance();
@@ -50,13 +41,10 @@ int main() {
 
     constexpr uint8_t LinuxConsoleUartNo = 0;
     constexpr uint8_t SystemCtlUartNo = 1;
-    LineExtractor *lineExtractSysCtl = new LineExtractor;
     queue_t *queueSystemCtlIn = getRxQueue(SystemCtlUartNo);
-    LineExtractor *lineExtractLinux = new LineExtractor;
     queue_t *queueLinuxConsoleIn = getRxQueue(LinuxConsoleUartNo);
 
     stdio_usb_init();
-    LineExtractor *lineExtractStdIn = new LineExtractor;
     queue_t *queueStdIn = StdInToQueue::getInstance()->getQueue();
 
     serial_uart_init(LinuxConsoleUartNo, 115200, 1, 0);
@@ -65,12 +53,12 @@ int main() {
     bool ledOn = true;
     while (1) {
         bool ledToggle = false;
-        if(queueToLog(queueSystemCtlIn, lineExtractSysCtl, "SystemCtrl"))
+        if(queueToLog(queueSystemCtlIn, &lineFromSysCtl, "SystemCtrl"))
             ledToggle = true;
-        if(queueToLog(queueLinuxConsoleIn, lineExtractLinux, "LinuxConsole"))
+        if(queueToLog(queueLinuxConsoleIn, &lineFromLinux, "LinuxConsole"))
             ledToggle = true;
 
-        const char* cmdLineIn = tryGetLine(queueStdIn, lineExtractStdIn);
+        const char* cmdLineIn = linesFromCmd.tryGetLine(queueStdIn);
         if(cmdLineIn) {
             ledToggle = true;
             if(!cmdParser.decodeExecuteLine(cmdLineIn))

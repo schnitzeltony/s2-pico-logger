@@ -41,6 +41,7 @@ add_executable(s2-pico-logger
     src/commandparser.cpp
     src/logger.cpp
     src/lineextractor.cpp
+    src/linefromqueue.cpp
     src/stringutils.cpp
     src/main.cpp
 )
