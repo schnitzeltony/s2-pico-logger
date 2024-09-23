@@ -39,7 +39,6 @@ int main() {
     }, nullptr));
 
     stdio_usb_init();
-
     serial_uart_init(LinuxConsoleUartNo, 115200, 1, 0);
     serial_uart_init(SystemCtlUartNo, 9600, 5, 4);
 
