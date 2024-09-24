@@ -9,6 +9,7 @@ class StdInToQueue
 public:
     StdInToQueue(int queueSize);
     queue_t* getQueue();
+    void enableAfterStdInInit();
     
 private:
     static void handleInput(void *param);

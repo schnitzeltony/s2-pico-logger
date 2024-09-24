@@ -2,11 +2,15 @@
 
 StdInToQueue::StdInToQueue(int queueSize) {
     queue_init(&m_queue, 1, queueSize);
-    stdio_set_chars_available_callback(StdInToQueue::handleInput, &m_queue);
 }
 
 queue_t* StdInToQueue::getQueue() {
     return &m_queue;
+}
+
+void StdInToQueue::enableAfterStdInInit()
+{
+    stdio_set_chars_available_callback(StdInToQueue::handleInput, &m_queue);
 }
 
 void StdInToQueue::handleInput(void *param) {
