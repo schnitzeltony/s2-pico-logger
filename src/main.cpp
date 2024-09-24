@@ -21,7 +21,9 @@ static LineFromQueue linesFromCmd(queueStdIn);
 static LineFromQueue lineFromSysCtl(queueSystemCtlIn);
 static LineFromQueue lineFromLinux(queueLinuxConsoleIn);
 
-static CommandParser cmdParser;
+static CommandParser cmdParser([](const std::string &cmdResponse) {
+    puts(cmdResponse.data());
+});
 
 static bool queueToLog(LineFromQueue *queueLine, const char* leadText) {
     bool linePrinted = false;

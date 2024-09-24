@@ -2,6 +2,11 @@
 #include "stringutils.h"
 #include "logger.h"
 
+CommandParser::CommandParser(std::function<void(const std::string &cmdResponse)> callbackCmdResponse) :
+    m_callbackCmdResponse(callbackCmdResponse)
+{
+}
+
 void CommandParser::addCmd(const Command &cmd)
 {
     m_commands.push_back(cmd);
@@ -34,9 +39,19 @@ bool CommandParser::decodeExecuteLine(const char *line)
 
 void CommandParser::outCmdResponse(const char *cmdLabel, bool cmdSucceeded, const char *resultDetails)
 {
-    const char* okErrorLabel = cmdSucceeded ? "OK" : "ERROR";
-    if(resultDetails && *resultDetails)
-        printf("%s,%s: %s\r\n", cmdLabel, okErrorLabel, resultDetails);
-    else
-        printf("%s,%s\r\n", cmdLabel, okErrorLabel);
+    std::string result;
+    bool hasDetails = resultDetails && *resultDetails;
+    // see https://github.com/ZeraGmbH/simple-parser
+    if(cmdSucceeded) {
+        result = std::string("OK");
+        if(hasDetails)
+            result += std::string(",") + resultDetails;
+    }
+    else {
+        result = std::string("ERROR");
+        if(hasDetails)
+            result += std::string(": ") + resultDetails;
+    }
+    const std::string cmdResponse = std::string(cmdLabel) + "," + result;
+    puts(cmdResponse.data());
 }
