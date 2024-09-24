@@ -1,6 +1,5 @@
 #include "commandparser.h"
 #include "stringutils.h"
-#include "logger.h"
 
 CommandParser::CommandParser(std::function<void(const std::string &cmdResponse)> callbackCmdResponse) :
     m_callbackCmdResponse(callbackCmdResponse)
