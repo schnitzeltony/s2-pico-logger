@@ -39,6 +39,7 @@ int main() {
     led_init();
     led_initialDance();
     cmdParser.addCmd(Command("SETTIME", 1, [&](void* param, std::vector<std::string> cmdParams) {
+        (void)param;
         return systemTime.setCurrentTime(cmdParams.front().data());
     },
     nullptr));
