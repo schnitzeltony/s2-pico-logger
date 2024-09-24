@@ -1,5 +1,4 @@
 #include "stringutils.h"
-#include <algorithm>
 
 std::string StringUtils::toUpper(const std::string &str)
 {
