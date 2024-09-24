@@ -1,6 +1,5 @@
 #include "serialuart.h"
 #include "hardware/uart.h"
-#include "hardware/irq.h"
 
 #define QUEUE_SIZE 32
 
