@@ -4,8 +4,8 @@
 
 #define QUEUE_SIZE 32
 
-queue_t rx_queues[NUM_UARTS];
-queue_t tx_queues[NUM_UARTS];
+static queue_t rx_queues[NUM_UARTS];
+static queue_t tx_queues[NUM_UARTS];
 
 static void uart0_interrupt();
 static void uart1_interrupt();
