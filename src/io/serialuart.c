@@ -1,5 +1,6 @@
 #include "serialuart.h"
-#include "hardware/uart.h"
+#include <hardware/uart.h>
+#include <hardware/gpio.h>
 
 #define QUEUE_SIZE 32
 

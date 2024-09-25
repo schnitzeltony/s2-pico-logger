@@ -1,8 +1,8 @@
 #ifndef SERIALUART_H
 #define SERIALUART_H
 
-#include "pico/stdlib.h"
-#include "pico/util/queue.h"
+#include <pico/util/queue.h>
+#include <stdint.h>
 
 #ifdef __cplusplus
 extern "C" {
