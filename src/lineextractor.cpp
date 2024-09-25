@@ -1,5 +1,4 @@
 #include "lineextractor.h"
-#include <pico/assert.h>
 
 void LineExtractor::add(char chr)
 {
