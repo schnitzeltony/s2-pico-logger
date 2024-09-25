@@ -1,4 +1,5 @@
 #include "stdintoqueue.h"
+#include <pico/stdio.h>
 
 StdInToQueue::StdInToQueue(int queueSize) {
     queue_init(&m_queue, 1, queueSize);

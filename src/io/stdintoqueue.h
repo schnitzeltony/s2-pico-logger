@@ -1,8 +1,7 @@
 #ifndef STDINTOQUEUE_H
 #define STDINTOQUEUE_H
 
-#include "pico/stdlib.h"
-#include "pico/util/queue.h"
+#include <pico/util/queue.h>
 
 class StdInToQueue
 {

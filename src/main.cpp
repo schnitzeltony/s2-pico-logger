@@ -4,7 +4,10 @@
 #include "stdintoqueue.h"
 #include "logger.h"
 #include "commandparser.h"
+#include "timestringgenerator.h"
+#include <pico/stdio_usb.h>
 #include <stdio.h>
+#include <string.h>
 
 TimeSync systemTime;
 Logger logger(&systemTime);
