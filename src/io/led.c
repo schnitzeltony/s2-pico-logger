@@ -1,4 +1,8 @@
 #include "led.h"
+#include <hardware/gpio.h>
+#include <pico/time.h>
+#include <stdint.h>
+
 #ifdef CYW43_WL_GPIO_LED_PIN
 #include "pico/cyw43_arch.h"
 #endif

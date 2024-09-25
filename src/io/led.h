@@ -1,7 +1,7 @@
 #ifndef LED_H
 #define LED_H
 
-#include "pico/stdlib.h"
+#include <stdbool.h>
 
 #ifdef __cplusplus
 extern "C" {
