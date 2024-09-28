@@ -16,7 +16,7 @@ void StdInToQueue::enableAfterStdInInit()
 
 void StdInToQueue::handleInput(void *param) {
     int charGetWide;
-    while((charGetWide = getchar_timeout_us(1)) != PICO_ERROR_TIMEOUT) {
+    while((charGetWide = getchar_timeout_us(0)) != PICO_ERROR_TIMEOUT) {
         queue_t *queue = static_cast <queue_t*>(param);
         uint8_t character = static_cast <uint8_t>(charGetWide);
         queue_try_add(queue, &character);
