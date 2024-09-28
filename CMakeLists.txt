@@ -60,6 +60,7 @@ target_link_libraries(s2-pico-logger
     )
 
 pico_enable_stdio_usb(s2-pico-logger TRUE)
+pico_enable_stdio_uart(s2-pico-logger FALSE)
 pico_add_extra_outputs(s2-pico-logger)
 
 # adjustments
