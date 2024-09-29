@@ -13,28 +13,28 @@ def main(map_file):
     for line in mapFile:
         name, originHex, sizeHex = parse_line(line)
         if(name == 'FLASH'):
-            startFlash = int(originHex, 16)
-            sizeFlash = int(sizeHex, 16)
+            flashStart = int(originHex, 16)
+            flashSize = int(sizeHex, 16)
         elif(name == '.flash_end'):
-            endFlashUsed = int(originHex, 16)
+            flashUsedEnd = int(originHex, 16)
         elif(name == 'RAM'):
-            startRam = int(originHex, 16)
-            sizeRam = int(sizeHex, 16)
+            ramStart = int(originHex, 16)
+            ramSize = int(sizeHex, 16)
         elif(name == '.heap'):
-            endRamUsed = int(originHex, 16)
+            ramUsedEnd = int(originHex, 16)
 
-    endFlash = startFlash + sizeFlash -1
-    flashUsed = endFlashUsed - startFlash
-    flashUsedPercent = flashUsed / sizeFlash * 100
+    flashUsed = flashUsedEnd - flashStart
+    flashUsedPercent = flashUsed / flashSize * 100
+    flashLast = flashStart + flashSize - 1
 
-    iEndRam = startRam + sizeRam -1
-    ramUsed = endRamUsed - startRam
-    ramUsedPercent = ramUsed / sizeRam * 100
+    ramUsed = ramUsedEnd - ramStart
+    ramUsedPercent = ramUsed / ramSize * 100
+    ramLast = ramStart + ramSize - 1
 
     print("")
-    print("Flash available: 0x%08X-0x%08X / %i bytes" % (startFlash, endFlash, sizeFlash))
+    print("Flash available: 0x%08X-0x%08X / %i bytes" % (flashStart, flashLast, flashSize))
     print("Flash used:      %i bytes (%.2f%%)" % (flashUsed, flashUsedPercent))
-    print("RAM available:   0x%08X-0x%08X / %i bytes" % (startRam, iEndRam, sizeRam))
+    print("RAM available:   0x%08X-0x%08X / %i bytes" % (ramStart, ramLast, ramSize))
     print("RAM used:        %i bytes (%.2f%%)" % (ramUsed, ramUsedPercent))
     print("")
 
