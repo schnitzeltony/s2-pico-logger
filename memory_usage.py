@@ -13,35 +13,30 @@ def main(map_file):
     for line in mapFile:
         name, originHex, sizeHex = parse_line(line)
         if(name == 'FLASH'):
-            originHexFlash = originHex
-            sizeHexFlash = sizeHex
+            startFlash = int(originHex, 16)
+            sizeFlash = int(sizeHex, 16)
         elif(name == '.flash_end'):
-            endFlashHex = originHex
-            endFlashDec = int(originHex, 16)
+            endFlashUsed = int(originHex, 16)
         elif(name == 'RAM'):
-            originHexRam = originHex
-            sizeHexRam = sizeHex
+            startRam = int(originHex, 16)
+            sizeRam = int(sizeHex, 16)
         elif(name == '.heap'):
-            endRamDec = int(originHex, 16)
-            endRamHex = originHex
+            endRamUsed = int(originHex, 16)
 
-    sizeDecFlash = int(sizeHexFlash, 16)
-    print("")
-    print("Flash:")
-    print("Total: %s / %i" % (sizeHexFlash, sizeDecFlash))
-    print("Start: %s / End: %s" % (originHexFlash, endFlashHex))
-    flashUsed = endFlashDec - int(originHexFlash, 16)
-    flashUsedPercent = flashUsed / sizeDecFlash * 100
-    print("Used:  %i / %.2f%%" % (flashUsed, flashUsedPercent))
+    endFlash = startFlash + sizeFlash -1
+    flashUsed = endFlashUsed - startFlash
+    flashUsedPercent = flashUsed / sizeFlash * 100
 
-    sizeDecRam = int(sizeHexRam, 16)
+    iEndRam = startRam + sizeRam -1
+    ramUsed = endRamUsed - startRam
+    ramUsedPercent = ramUsed / sizeRam * 100
+
     print("")
-    print("RAM:")
-    print("Total: %s / %i" % (sizeHexRam, sizeDecRam))
-    print("Start: %s / End: %s" % (originHexRam, endRamHex))
-    ramUsed = endRamDec - int(originHexRam, 16)
-    ramUsedPercent = ramUsed / sizeDecRam * 100
-    print("Used:  %i / %.2f%%" % (ramUsed, ramUsedPercent))
+    print("Flash available: 0x%08X-0x%08X / %i bytes" % (startFlash, endFlash, sizeFlash))
+    print("Flash used:      %i bytes (%.2f%%)" % (flashUsed, flashUsedPercent))
+    print("RAM available:   0x%08X-0x%08X / %i bytes" % (startRam, iEndRam, sizeRam))
+    print("RAM used:        %i bytes (%.2f%%)" % (ramUsed, ramUsedPercent))
+    print("")
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
