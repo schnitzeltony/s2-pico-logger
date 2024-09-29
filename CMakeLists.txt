@@ -69,3 +69,9 @@ if(PICO_BOARD STREQUAL "pico2")
     # see https://github.com/oyama/pico-vfs/issues/57
     target_compile_definitions(s2-pico-logger PRIVATE PICO_FS_DEFAULT_SIZE=3145728)
 endif()
+
+# memory used build output
+add_custom_target(memory-usage SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/memory_usage.py) # just to display file
+add_custom_command(TARGET s2-pico-logger POST_BUILD
+    COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/memory_usage.py "${CMAKE_CURRENT_BINARY_DIR}/s2-pico-logger.elf.map"
+)
