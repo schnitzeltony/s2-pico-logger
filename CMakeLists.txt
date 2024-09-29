@@ -63,13 +63,6 @@ pico_enable_stdio_usb(s2-pico-logger TRUE)
 pico_enable_stdio_uart(s2-pico-logger FALSE)
 pico_add_extra_outputs(s2-pico-logger)
 
-# adjustments
-target_compile_definitions(s2-pico-logger PRIVATE PARAM_ASSERTIONS_ENABLE_ALL=1) # Not working - why ???
-if(PICO_BOARD STREQUAL "pico2")
-    # see https://github.com/oyama/pico-vfs/issues/57
-    target_compile_definitions(s2-pico-logger PRIVATE PICO_FS_DEFAULT_SIZE=3145728)
-endif()
-
 # memory used build output
 add_custom_target(memory-usage SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/memory_usage.py) # just to display file
 add_custom_command(TARGET s2-pico-logger POST_BUILD
