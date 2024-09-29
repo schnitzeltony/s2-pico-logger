@@ -2,7 +2,8 @@
 #include <hardware/uart.h>
 #include <hardware/gpio.h>
 
-#define QUEUE_SIZE 32
+#define RX_QUEUE_SIZE 32
+#define TX_QUEUE_SIZE 512
 
 static queue_t rx_queues[NUM_UARTS];
 static queue_t tx_queues[NUM_UARTS];
@@ -15,8 +16,8 @@ static void serial_uart_enable_interrupt(uint8_t uartNo);
 void serial_uart_init(uint8_t uartNo, uint32_t baudrate, uint8_t rxPin, uint8_t txPin)
 {
     assert(uartNo < NUM_UARTS);
-    queue_init(&rx_queues[uartNo], 1, QUEUE_SIZE);
-    queue_init(&tx_queues[uartNo], 1, QUEUE_SIZE);
+    queue_init(&rx_queues[uartNo], 1, RX_QUEUE_SIZE);
+    queue_init(&tx_queues[uartNo], 1, TX_QUEUE_SIZE);
 
     uart_inst_t *uart = uart_get_instance(uartNo);
     uart_init(uart, baudrate);
